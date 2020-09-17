@@ -1,0 +1,206 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+    <meta charset="UTF-8"/>
+    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+    <link
+            rel="stylesheet"
+            href="https://use.fontawesome.com/releases/v5.0.13/css/all.css"
+            integrity="sha384-DNOHZ68U8hZfKXOrtjWvjxusGo9WQnrNx2sqG0tfsghAvtVlRW3tvkXWZh58N9jp"
+            crossorigin="anonymous"
+    />
+    <link rel="stylesheet" href="../static/css/bootstrap.css" th:href="@{/css/bootstrap.css}"/>
+    <link rel="stylesheet" href="../static/css/style.css" th:href="@{/css/style.css}"/>
+    <title>Web Scraper</title>
+</head>
+<body>
+<!-- NAVBAR -->
+<nav
+        class="navbar navbar-expand-md navbar-light fixed-top py-4"
+        id="main-nav"
+>
+    <div class="container">
+        <a href="index.html" class="navbar-brand" th:href="@{/}">
+            <h3 class="d-inline align-middle">Alexa TMDB Web Scraper</h3>
+        </a>
+        <button
+                class="navbar-toggler"
+                data-toggle="collapse"
+                data-target="#navbarCollapse"
+        >
+            <span class="navbar-toggle-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbar-collapse">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <a href="alexa.html" class="nav-link" th:href="@{/alexa}">Alexa</a>
+                </li>
+                <li class="nav-item">
+                    <a href="tmdb.html" class="nav-link" th:href="@{/tmdb}">TMDB</a>
+                </li>
+            </ul>
+        </div>
+    </div>
+</nav>
+
+<!-- ALEXA SEARCH -->
+<section class="py-5" id="tmdb-search">
+    <div class="container">
+        <div class="row justify-content-center">
+            <div class="col-lg-7">
+                <div class="card">
+                    <div class="card-header bg-primary text-white text-center">
+                        <h1 class="display-5">TMDB Info Scraper</h1>
+                    </div>
+                    <div class="card-body bg-light">
+                        <form action="tmdb.html" class="form" th:action="@{/tmdb}" th:object="${tmdbInput}"
+                              method="post">
+                            <label>Movie Title</label>
+                            <input type="text" class="form-control" placeholder="Thor" th:field="*{movieTitle}"/>
+                            <button
+                                    type="submit"
+                                    class="btn btn-outline-primary btn-block btn-lg mt-5"
+                                    data-toggle="modal"
+                                    data-target="#tmdbSearch"
+                                    value="Search"
+                            >
+                                <i class="fas fa-search"></i>
+                                SEARCH
+                            </button>
+                        </form>
+
+                        <a
+                                class="btn btn-outline-primary btn-block btn-lg mt-5"
+                                data-toggle="modal"
+                                data-target="#tmdbShowData"
+                        >
+                            <i class="fas fa-folder"></i>
+                            SHOW GOOGLE SHEET DATA
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- FOOTER -->
+<footer class="py-5 bg-primary text-white">
+    <div class="container">
+        <div class="row text-center">
+            <div class="col-md-6 ml-auto">
+                <p class="lead">Copyright &copy; <span id="year"></span></p>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<!-- MODAL -->
+
+<!-- TMDB SEARCH MODAL -->
+<div class="modal" id="tmdbSearch">
+    <div class="container">
+        <div class="modal-dialog">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">TMDB Search Results</h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-center">
+                    <div class="row lead ml-3">
+                        Title:
+                        <p class="lead ml-3" th:text="${tmdbData.title}">Thor</p>
+                    </div>
+                    <div class="row lead ml-3">
+                        Picture:
+                        <p class="lead ml-3" th:text="${tmdbData.picture}">Image</p>
+                    </div>
+                    <div class="row lead ml-3">
+                        User Score:
+                        <p class="lead ml-3" th:text="${tmdbData.userScore}">95</p>
+                    </div>
+                    <div class="row lead ml-3">
+                        Release Date:
+                        <p class="lead ml-3" th:text="${tmdbData.releaseDate}">Octomber 1, 2019</p>
+                    </div>
+                    <div class="row lead ml-3">
+                        Runtime:
+                        <p class="lead ml-3" th:text="${tmdbData.runtime}">2h 11m</p>
+                    </div>
+                    <div class="row lead ml-3">
+                        Genres:
+                        <p class="lead ml-3" th:text="${tmdbData.genres}">Action Fantasy</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<!-- ALEXA SHOW DATA MODAL -->
+<div class="modal" id="tmdbShowData">
+    <div class="container">
+        <div class="modal-lg">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title">Google Sheet Data</h5>
+                    <button class="close" data-dismiss="modal">&times;</button>
+                </div>
+                <div class="modal-body text-center" style="overflow-y:auto;">
+                    <table class="table table-striped table-bordered table-hover">
+                        <thead>
+                        <tr class="bg-primary text-white">
+                            <th>Title</th>
+                            <th>User Score</th>
+                            <th>Release Date</th>
+                            <th>Runtime</th>
+                            <th>Genres</th>
+                        </tr>
+                        </thead>
+                        <tbody>
+                        <tr th:each="tmdbData : ${tmdbList}">
+                            <td th:text="${tmdbData.title}">Test</td>
+                            <td th:text="${tmdbData.userScore}">Test</td>
+                            <td th:text="${tmdbData.releaseDate}">Test</td>
+                            <td th:text="${tmdbData.runtime}">Test</td>
+                            <td th:text="${tmdbData.genres}">Test</td>
+                        </tr>
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script
+        src="http://code.jquery.com/jquery-3.5.1.min.js"
+        integrity="sha256-9/aliU8dGd2tb6OSsuzixeV4y/faTqgFtohetphbbj0="
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://cdn.jsdelivr.net/npm/popper.js@1.16.1/dist/umd/popper.min.js"
+        integrity="sha384-9/reFTGAW83EW2RDu2S0VKaIzap3H66lZH81PoYlFhbGU+6BZp6G7niu735Sk7lN"
+        crossorigin="anonymous"
+></script>
+<script
+        src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"
+        integrity="sha384-B4gt1jrGC7Jh4AgTPSdUtOBvfO8shuf57BaghqFfPlYxofvL8/KUEfYiJOMMV+rV"
+        crossorigin="anonymous"
+></script>
+
+<script>
+      // Get the current year for the copyright
+      $("#year").text(new Date().getFullYear());
+
+
+
+
+
+
+
+
+
+</script>
+</body>
+</html>
